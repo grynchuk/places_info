@@ -3,7 +3,8 @@
 namespace app\loader;
 
 use GuzzleHttp\Client,
-    GuzzleHttp\Pool
+    GuzzleHttp\Pool,
+    GuzzleHttp\Psr7\Request;    
     ;
 
 /**
@@ -11,12 +12,12 @@ use GuzzleHttp\Client,
  *
  * @author Анатолий
  */
- abstract class BaseAsyncLoader {
+ abstract class BaseLoader {
        
     protected $success, $errors;
 
 
-    protected function process() {
+    protected function processAsync() {
     $client = new Client();
     
     list($reqs, $reqObjs) = $this->getRequests();
@@ -47,6 +48,23 @@ use GuzzleHttp\Client,
     $promise->wait();
      
     return [$success, $errors];
+    }
+    
+    public function processSync() {
+      $client = new Client();
+      
+      list($req, $reqObj)= $this->getRequests();
+      
+      $response = $client->send($req);
+            
+      $success = [
+          'data' => $this->getResponse($response),
+          'req'=> $reqObj
+      ];
+      
+      $error = [];
+      
+      return [$success, $error];
     }
     
     abstract protected function getRequests();

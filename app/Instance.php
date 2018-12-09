@@ -1,7 +1,8 @@
 <?php
 namespace app;
 use app\Container,
-    app\loader\Cities;
+    app\loader\Cities,
+    app\loader\Places;
 /**
  * Description of Instance
  *
@@ -19,8 +20,11 @@ class Instance {
         try {
             $c = new Cities();
             $c->process();
-            var_dump($c->data); 
-        } catch (Exception $ex) {
+            
+            $p = new Places(); 
+            $p->setCities($c->data)
+            ->process();
+        } catch (\Exception $ex) {
             $this->logMessage($ex->getMessage());
         }
     }

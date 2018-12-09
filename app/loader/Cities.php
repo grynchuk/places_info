@@ -13,7 +13,7 @@ use app\Container,
  *
  * @author Grynchuk
  */
-class Cities extends BaseAsyncLoader {
+class Cities extends BaseLoader {
     
     private $config, $fileName;
     
@@ -34,7 +34,7 @@ class Cities extends BaseAsyncLoader {
         
         if ( ! $this->data) {
         
-            list($success, $errors) = parent::process();
+            list($success, $errors) = parent::processAsync();
 
             if ($errors OR ! $success) {
                 throw new \Exception('Error on process Cities : ' . json_encode($errors));    
