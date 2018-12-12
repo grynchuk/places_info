@@ -10,6 +10,11 @@ use app\Container;
  */
 abstract class BaseRequest {
     
+    const LANG_EN = 'en',
+          LANG_UA = 'ua',
+          LANG_RU = 'ru';  
+
+
     public function getUrl()
     {
         $config = Container::getConfig();

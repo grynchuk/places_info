@@ -9,17 +9,12 @@ namespace app\request;
  */
 class Places extends BaseRequest{
     
-    private $lat, $lng, $pagetoken;
+    private $lat, $lng, $pagetoken, $city;
     
-    protected function getParams() {
+    protected function getParams($lang = 'en') {
         
         if ( ! $this->pagetoken) {
-            $params = [
-                'location' => $this->lat . ',' . $this->lng, 
-                'radius' => 40000,     
-                'keyword' => 'Сінево',
-                'language' => 'ru'
-            ];
+            $params = $this->getParamLang($lang);
         } else {
             $params = ['pagetoken'=> $this->pagetoken];
         } 
@@ -27,10 +22,42 @@ class Places extends BaseRequest{
         return $params;
     }
     
+   
+    
+    private function getParamLang() {
+        $params = [
+          self::LANG_EN => [
+                'location' => $this->lat . ',' . $this->lng, 
+                'radius' => 40000,     
+                'keyword' => 'Sinevo'
+               ],
+          self::LANG_UA => [
+                'location' => $this->lat . ',' . $this->lng, 
+                'radius' => 40000,
+                'language' => 'ua', 
+                'keyword' => 'Сінево'
+          ],
+          self::LANG_RU => [
+                'location' => $this->lat . ',' . $this->lng, 
+                'radius' => 40000,
+                'language' => 'ru', 
+                'keyword' => 'Синэво'
+          ]  
+        ];
+        var_dump($this->lang);
+        return $params[$this->lang]; 
+    }
+    
+    
     protected function getMidUrl() {
         return'/maps/api/place/nearbysearch/json';
     }
 
+    function setLang($lang) {
+        $this->lang = $lang;
+        return $this;
+    }
+    
     function setLng($lng) {       
         $this->lng = $lng;
         return $this;
@@ -46,8 +73,13 @@ class Places extends BaseRequest{
         return $this;
     }
     
+    function setCity($city) {       
+        $this->city = $city;
+        return $this;
+    }
+    
     function getId() {
-        return $this->city;
+        return $this->city . '_' . $this->pagetoken . '_' . time()  ;
     }
     
     

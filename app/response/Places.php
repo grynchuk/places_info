@@ -25,6 +25,7 @@ class Places extends BaseResponse {
                 'rating'=> $result['rating']
             ];
         }
+
     }
     
     protected function getExpFields() {
@@ -32,6 +33,7 @@ class Places extends BaseResponse {
     } 
     
     public function getNextPageToken(){
+       
         return isset($this->rowData['next_page_token'])
              ? $this->rowData['next_page_token']
              : NULL;

@@ -35,7 +35,7 @@ return [
       "Хмельник", "Хмельницкий", "Чабаны",
       "Червоноград", "Черкассы", "Черновцы",
       "Чернигов", "Черноморск (Ильичевск)"],
-  'api_key' => 'AIzaSyBN_oMwQ8YnQ9xEVDTodWUKduUV45hRTWs',
+  'api_key' => 'api_key',
   'data_folder' => implode(DIRECTORY_SEPARATOR, [__DIR__,'data']),   
   'google_url' => 'https://maps.googleapis.com'  
 ];

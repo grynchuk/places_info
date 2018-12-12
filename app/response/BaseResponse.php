@@ -23,6 +23,10 @@ abstract class BaseResponse {
             throw new Exception('Empty Response');
         }
         
+        if ($this->rowData['status'] === "ZERO_RESULTS") {
+            throw new \Exception('Error : Not found try to search on another lang ', 1);
+        }
+        
         if ($this->rowData['status'] !== "OK") {
             throw new \Exception('Error : ' .$this->rowData['status']);
         }

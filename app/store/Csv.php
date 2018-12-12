@@ -9,11 +9,13 @@ use app\Container;
  * @author Анатолий
  */
 class Csv extends baseStore {
-    private $objs = [],
+    private $separator = ',',
+            $isHeader = true,
+            $objs = [],
             $config, 
             $fileName,
             $stored,
-            $stringFields;
+            $stringFields=[];
     
     public function __construct() {
         $this->config = Container::getConfig();        
@@ -24,15 +26,44 @@ class Csv extends baseStore {
         
         $fp = fopen($this->fileName, 'w');
 
-        foreach ($this->stored as $key => $fields) {
-            $fields['id'] = $key;
-            $this->prepareString($fields);
-            fputcsv($fp, $fields, ',');
+        
+        foreach ($this->stored as $key => $fields) {          
+                                
+                if (is_array(array_values($fields)[0])) {
+                    
+                   foreach ($fields as $field) {
+                       
+                       $field['id'] = $key;  
+                       $this->setHeaderIfNeeded($fp, $field);   
+                       $this->prepareString($fp, $field);
+                       $this->putData($fp, $field);
+                   } 
+                } else {
+                    $fields['id'] = $key;
+                    $this->setHeaderIfNeeded($fp, $fields);
+                    $this->prepareString($fp, $fields);
+                    $this->putData($fp, $fields);    
+                }
+                
         }
-
+            
         fclose($fp);
         
         return $this;
+    }
+    
+    private function putData($fp, $data) {
+         if (isset($this->decoData[$data['id']])){
+             $data += $this->decoData[$data['id']];
+         }
+        
+         fputcsv($fp, $data,$this->separator);
+    }
+    
+    function setHeaderIfNeeded($fp, $field){
+        if (! $this->isHeader) return;
+        $this->isHeader = false; 
+        fputcsv($fp, array_keys($field), $this->separator);
     }
     
     public function setStringFields($f) {
@@ -49,7 +80,7 @@ class Csv extends baseStore {
     
     public function setObjects($objs)
     {               
-        $this->objs = $objs;
+        $this->objs = array_merge($this->objs,$objs);
         return $this;
     }
 

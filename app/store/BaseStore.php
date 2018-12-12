@@ -18,12 +18,17 @@ abstract class baseStore {
             $req = $obj['req'];
             $resp = $obj['data'];                        
             $this->setItem($req, $resp, $res);
-        }        
+        }    
         return $res;
     }
     
     private function setItem(BaseRequest $req, BaseResponse $resp, &$data) {
         $data[$req->getId()] = $resp->toArray();
+    }
+    
+    public function decorateWithData($data) {
+        $this->decoData = $data;
+        return $this;
     }
     
     abstract public function store();

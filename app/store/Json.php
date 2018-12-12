@@ -21,14 +21,14 @@ class Json extends BaseStore {
     }
     
     public function store() {
-        $this->stored = $this->getStoreAble();
+        $this->stored = $this->getStoreAble();        
         file_put_contents($this->fileName, json_encode($this->stored));
         return $this;
     }
     
     public function setObjects($objs)
     {               
-        $this->objs = $objs;
+        $this->objs = array_merge($this->objs,$objs);
         return $this;
     }
 
@@ -53,7 +53,4 @@ class Json extends BaseStore {
         
         return $data;
     }
-    
-    
-    
 }

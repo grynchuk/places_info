@@ -13,7 +13,7 @@ class Cities extends BaseRequest{
     
     protected function getParams() {
         return [
-            'address' => $this->city,
+            'address' => $this->city . ' , Украина',
             'language' => 'ru'
         ];
     }

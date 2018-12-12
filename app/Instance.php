@@ -2,7 +2,8 @@
 namespace app;
 use app\Container,
     app\loader\Cities,
-    app\loader\Places;
+    app\loader\Places,
+    app\loader\Details;
 /**
  * Description of Instance
  *
@@ -12,7 +13,7 @@ use app\Container,
 class Instance { 
     
     public function __construct($config) {
-        var_dump($config);
+       
         Container::setConfig($config);
     }
     
@@ -23,7 +24,12 @@ class Instance {
             
             $p = new Places(); 
             $p->setCities($c->data)
-            ->process();
+             ->process();
+            
+            $d = new Details();
+            $d->setPlaceData($p->uniqueData)
+              ->process();       
+            
         } catch (\Exception $ex) {
             $this->logMessage($ex->getMessage());
         }
